@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milne Masonry - Staining Estimate Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1a365d;
+            --navy-light: #2c5282;
+            --gold: #d69e2e;
+            --gold-light: #ecc94b;
+            --gray-50: #f7fafc;
+            --gray-100: #edf2f7;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e0;
+            --gray-500: #718096;
+            --gray-700: #4a5568;
+            --gray-900: #1a202c;
+            --red: #c53030;
+            --green: #276749;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 1200px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Panel - Calculator */
+        .calculator-panel {
+            padding: 2rem;
+            background: white;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--navy);
+        }
+
+        .logo-mark {
+            width: 48px;
+            height: 48px;
+            background: var(--navy);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-text span {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-500);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-200);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .form-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        input, select, textarea {
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
+        }
+
+        input[type="number"] {
+            font-family: 'DM Mono', monospace;
+        }
+
+        .input-with-prefix {
+            position: relative;
+        }
+
+        .input-with-prefix input {
+            padding-left: 1.5rem;
+        }
+
+        .input-with-prefix::before {
+            content: '$';
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            font-family: 'DM Mono', monospace;
+        }
+
+        /* Areas Table */
+        .areas-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        .areas-table th {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            text-align: left;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .areas-table td {
+            padding: 0.35rem;
+        }
+
+        .areas-table input, .areas-table select {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .areas-table .col-desc { width: 40%; }
+        .areas-table .col-sf { width: 20%; }
+        .areas-table .col-diff { width: 25%; }
+        .areas-table .col-days { width: 15%; }
+
+        .calculated-field {
+            background: var(--gray-50);
+            border-color: transparent;
+            color: var(--gray-700);
+            font-family: 'DM Mono', monospace;
+        }
+
+        .add-area-btn {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--gray-100);
+            border: 1px dashed var(--gray-300);
+            border-radius: 6px;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .add-area-btn:hover {
+            background: var(--gray-200);
+            border-color: var(--gray-400);
+            color: var(--gray-700);
+        }
+
+        /* Totals */
+        .totals-box {
+            background: var(--navy);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.35rem 0;
+            font-size: 0.9rem;
+        }
+
+        .totals-row.subtotal {
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+        }
+
+        .totals-row.grand-total {
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-top: 2px solid var(--gold);
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+        }
+
+        .totals-row .value {
+            font-family: 'DM Mono', monospace;
+        }
+
+        .per-sf {
+            font-size: 0.8rem;
+            color: var(--gold-light);
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        /* Settings Toggle */
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .settings-toggle:hover {
+            background: var(--gray-100);
+        }
+
+        .settings-panel {
+            display: none;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-panel.open {
+            display: block;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .settings-grid input {
+            font-size: 0.85rem;
+            padding: 0.5rem;
+        }
+
+        /* Right Panel - Quote Preview */
+        .preview-panel {
+            background: var(--gray-200);
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--navy-light);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+        }
+
+        /* Quote Document */
+        .quote-document {
+            background: white;
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 8.5in;
+            margin: 0 auto;
+        }
+
+        .quote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid var(--navy);
+            margin-bottom: 1.5rem;
+        }
+
+        .quote-company h2 {
+            font-size: 1.75rem;
+            color: var(--navy);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .quote-company .tagline {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        .quote-company .address {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .quote-title-block {
+            text-align: right;
+        }
+
+        .quote-title-block h3 {
+            font-size: 1.25rem;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .quote-title-block .licenses {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.5rem;
+        }
+
+        .quote-info-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.25rem 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .quote-info-grid dt {
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .quote-info-grid dd {
+            color: var(--gray-900);
+        }
+
+        .quote-section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--navy);
+            margin: 1.5rem 0 0.75rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-table th {
+            background: var(--navy);
+            color: white;
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-table th:last-child {
+            text-align: right;
+        }
+
+        .pricing-table td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.9rem;
+        }
+
+        .pricing-table td:last-child {
+            text-align: right;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .pricing-table tr.total-row {
+            background: var(--gray-100);
+            font-weight: 600;
+        }
+
+        .pricing-table tr.total-row td {
+            border-bottom: none;
+        }
+
+        .scope-list {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .scope-list li {
+            padding: 0.35rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .scope-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--navy);
+            font-weight: bold;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .terms-text {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            line-height: 1.7;
+        }
+
+        .terms-text p {
+            margin-bottom: 0.5rem;
+        }
+
+        .referral-box {
+            background: var(--gray-50);
+            border-left: 3px solid var(--gold);
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .referral-box strong {
+            color: var(--navy);
+        }
+
+        .signature-block {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .sig-line {
+            border-top: 1px solid var(--gray-400);
+            padding-top: 0.35rem;
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 2rem;
+        }
+
+        .quote-footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            .calculator-panel, .preview-actions {
+                display: none;
+            }
+            .preview-panel {
+                background: white;
+                padding: 0;
+            }
+            .quote-document {
+                box-shadow: none;
+                padding: 0.5in;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Calculator Panel -->
+        <div class="calculator-panel">
+            <div class="logo-header">
+                <div class="logo-mark">MM</div>
+                <div class="logo-text">
+                    <h1>Milne Masonry</h1>
+                    <span>Staining Estimate Tool</span>
+                </div>
+            </div>
+
+            <!-- Settings Toggle -->
+            <div class="settings-toggle" onclick="toggleSettings()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                </svg>
+                Settings (Labor Rates, Materials, Production)
+            </div>
+
+            <div class="settings-panel" id="settingsPanel">
+                <div class="section-title">Labor & Production</div>
+                <div class="settings-grid">
+                    <div class="form-group">
+                        <label>Daily Rate / Person</label>
+                        <input type="number" id="dailyRate" value="560" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Setup/Cleanup $/hr</label>
+                        <input type="number" id="setupRate" value="70" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Markup %</label>
+                        <input type="number" id="markup" value="30" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Easy SF/person/day</label>
+                        <input type="number" id="prodEasy" value="300" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Medium SF/person/day</label>
+                        <input type="number" id="prodMedium" value="200" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Detail SF/person/day</label>
+                        <input type="number" id="prodDetail" value="100" onchange="calculate()">
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top: 1rem;">Materials</div>
+                <div class="settings-grid">
+                    <div class="form-group">
+                        <label>Elixir $/gallon</label>
+                        <input type="number" id="elixirCost" value="45.32" step="0.01" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Color Tub $</label>
+                        <input type="number" id="colorCost" value="245.14" step="0.01" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Half cups / gallon</label>
+                        <input type="number" id="cupsPerGal" value="32.5" step="0.1" onchange="calculate()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Info -->
+            <div class="section">
+                <div class="section-title">Job Information</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="quoteDate" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Estimator</label>
+                        <input type="text" id="estimator" value="Ryan Shanley 503.490.2136" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Project Name</label>
+                        <input type="text" id="projectName" placeholder="e.g., Nelson Family House" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Address</label>
+                        <input type="text" id="address" placeholder="Street address" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>City, State, Zip</label>
+                        <input type="text" id="cityStateZip" placeholder="e.g., Keizer, OR 97303" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Contact Name</label>
+                        <input type="text" id="contact" placeholder="Customer name" onchange="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Panel -->
+            <div class="section">
+                <div class="section-title">Sample Panel</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Sample Panel Price</label>
+                        <div class="input-with-prefix">
+                            <input type="number" id="samplePanel" value="500" onchange="calculate()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <input type="text" id="sampleNotes" placeholder="Travel, etc.">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brick & Crew -->
+            <div class="section">
+                <div class="section-title">Brick Type & Crew</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Brick Type</label>
+                        <select id="brickType" onchange="calculate()">
+                            <option value="standards" data-persf="6.5" data-percup="80">Standards (6.5/SF)</option>
+                            <option value="225standards" data-persf="5.5" data-percup="92">2.25 Standards (5.5/SF)</option>
+                            <option value="normans" data-persf="4.5" data-percup="53">Normans (4.5/SF)</option>
+                            <option value="econs" data-persf="4" data-percup="42">Econs (4/SF)</option>
+                            <option value="448s" data-persf="5" data-percup="63">448s (5/SF)</option>
+                            <option value="cmu" data-persf="1.125" data-percup="20">CMU 8" (1.125/SF)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Crew Size</label>
+                        <select id="crewSize" onchange="calculate()">
+                            <option value="1">1 person</option>
+                            <option value="2">2 people</option>
+                            <option value="3">3 people</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Areas -->
+            <div class="section">
+                <div class="section-title">Work Areas</div>
+                <table class="areas-table">
+                    <thead>
+                        <tr>
+                            <th style="width:28%">Description</th>
+                            <th style="width:12%">Length</th>
+                            <th style="width:12%">Height</th>
+                            <th style="width:12%">SF</th>
+                            <th style="width:22%">Difficulty</th>
+                            <th style="width:14%">Days</th>
+                        </tr>
+                    </thead>
+                    <tbody id="areasBody">
+                        <tr>
+                            <td><input type="text" placeholder="e.g., Front wall" onchange="calculate()"></td>
+                            <td><input type="number" placeholder="0" onchange="calculate()"></td>
+                            <td><input type="number" placeholder="0" onchange="calculate()"></td>
+                            <td><input type="number" class="calculated-field" readonly></td>
+                            <td>
+                                <select onchange="calculate()">
+                                    <option value="easy">Easy</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="detail">Detail</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="calculated-field" readonly></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="add-area-btn" onclick="addArea()">+ Add Area</button>
+            </div>
+
+            <!-- Setup & Subs -->
+            <div class="section">
+                <div class="section-title">Setup & Subcontractors</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Setup Hours</label>
+                        <input type="number" id="setupHours" value="2" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Cleanup Hours</label>
+                        <input type="number" id="cleanupHours" value="2" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Pressure Wash (sub)</label>
+                        <div class="input-with-prefix">
+                            <input type="number" id="pressureWash" value="0" onchange="calculate()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Other Sub</label>
+                        <div class="input-with-prefix">
+                            <input type="number" id="otherSub" value="0" onchange="calculate()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Totals -->
+            <div class="totals-box">
+                <div class="totals-row">
+                    <span>Labor</span>
+                    <span class="value" id="totalLabor">$0</span>
+                </div>
+                <div class="totals-row">
+                    <span>Materials</span>
+                    <span class="value" id="totalMaterials">$0</span>
+                </div>
+                <div class="totals-row">
+                    <span>Setup/Cleanup</span>
+                    <span class="value" id="totalSetup">$0</span>
+                </div>
+                <div class="totals-row">
+                    <span>Subcontractors</span>
+                    <span class="value" id="totalSubs">$0</span>
+                </div>
+                <div class="totals-row subtotal">
+                    <span>Subtotal</span>
+                    <span class="value" id="subtotal">$0</span>
+                </div>
+                <div class="totals-row">
+                    <span>Markup (<span id="markupPct">30</span>%)</span>
+                    <span class="value" id="totalMarkup">$0</span>
+                </div>
+                <div class="totals-row grand-total">
+                    <span>Staining Total</span>
+                    <span class="value" id="stainingTotal">$0</span>
+                </div>
+                <div class="totals-row" style="opacity: 0.7;">
+                    <span>+ Sample Panel</span>
+                    <span class="value" id="samplePanelTotal">$500</span>
+                </div>
+                <div class="totals-row grand-total" style="border-top-color: white;">
+                    <span>GRAND TOTAL</span>
+                    <span class="value" id="grandTotal">$500</span>
+                </div>
+                <div class="per-sf">
+                    <span id="totalSF">0</span> SF @ <span id="perSF">$0.00</span>/SF
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="preview-panel">
+            <div class="preview-actions">
+                <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">Copy Text</button>
+            </div>
+
+            <div class="quote-document" id="quoteDocument">
+                <div class="quote-header">
+                    <div class="quote-company">
+                        <h2>MILNE MASONRY</h2>
+                        <div class="tagline">Innovative Masonry Solutions</div>
+                        <div class="address">
+                            14489 SE Hwy 212<br>
+                            Clackamas, OR 97015<br>
+                            (503) 658-6444
+                        </div>
+                    </div>
+                    <div class="quote-title-block">
+                        <h3>Masonry Staining<br>Proposal</h3>
+                        <div class="licenses">
+                            OR CCB# 120098<br>
+                            WA# MILNEMI032J5
+                        </div>
+                    </div>
+                </div>
+
+                <dl class="quote-info-grid">
+                    <dt>Date:</dt>
+                    <dd id="previewDate">—</dd>
+                    <dt>Project:</dt>
+                    <dd id="previewProject">—</dd>
+                    <dt>Address:</dt>
+                    <dd id="previewAddress">—</dd>
+                    <dt>Prepared for:</dt>
+                    <dd id="previewContact">—</dd>
+                    <dt>Estimator:</dt>
+                    <dd id="previewEstimator">Ryan Shanley 503.490.2136</dd>
+                </dl>
+
+                <div class="quote-section-title">Proposal</div>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th style="text-align: right;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewPricing">
+                        <tr>
+                            <td>Sample Panel</td>
+                            <td>$500</td>
+                        </tr>
+                        <tr>
+                            <td>Brick Staining — <span id="previewSF">0</span> SF</td>
+                            <td id="previewStaining">$0</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>TOTAL</td>
+                            <td id="previewTotal">$500</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="quote-section-title">Scope of Work</div>
+                <ul class="scope-list">
+                    <li>Sample panel; if accepted on first trip, included in staining price.</li>
+                    <li>Stain brick to specified color per approved sample.</li>
+                    <li>For best results, brick should be pressure washed prior to our arrival.</li>
+                    <li>Final walkthrough with photos and care tips.</li>
+                </ul>
+
+                <div class="two-column">
+                    <div>
+                        <div class="quote-section-title">Inclusions</div>
+                        <ul class="scope-list">
+                            <li>Access equipment as needed</li>
+                            <li>Daily cleanup</li>
+                            <li>1 mobilization included</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="quote-section-title">Exclusions</div>
+                        <ul class="scope-list">
+                            <li>Pressure washing</li>
+                            <li>Masonry repairs</li>
+                            <li>Permits / Traffic control</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="quote-section-title">Terms</div>
+                <div class="terms-text">
+                    <p>This bid is valid for 30 days from the date above.</p>
+                    <p>30% deposit to schedule sample panel; balance due at completion after walkthrough.</p>
+                    <p>Additional mobilizations: $500 each. Card accepted; +2% processing fee.</p>
+                </div>
+
+                <div class="referral-box">
+                    <strong>Neighbor Referral:</strong> For each neighbor who books within 60 days and mentions you, we'll apply 5% off your final invoice (up to 15% max).
+                </div>
+
+                <div class="signature-block">
+                    <div>
+                        <div class="sig-line">Customer Signature</div>
+                        <div class="sig-line">Print Name</div>
+                    </div>
+                    <div>
+                        <div class="sig-line">Date</div>
+                        <div class="sig-line">Phone</div>
+                    </div>
+                </div>
+
+                <div class="quote-footer">
+                    Innovative Masonry Solutions DBA Milne Masonry, Inc.<br>
+                    Licensed • Bonded • Insured • Union Shop
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date
+        document.getElementById('quoteDate').valueAsDate = new Date();
+
+        function toggleSettings() {
+            document.getElementById('settingsPanel').classList.toggle('open');
+        }
+
+        function addArea() {
+            const tbody = document.getElementById('areasBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" placeholder="Description" onchange="calculate()"></td>
+                <td><input type="number" placeholder="0" onchange="calculate()"></td>
+                <td><input type="number" placeholder="0" onchange="calculate()"></td>
+                <td><input type="number" class="calculated-field" readonly></td>
+                <td>
+                    <select onchange="calculate()">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="detail">Detail</option>
+                    </select>
+                </td>
+                <td><input type="text" class="calculated-field" readonly></td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        function calculate() {
+            // Get settings
+            const dailyRate = parseFloat(document.getElementById('dailyRate').value) || 0;
+            const setupRate = parseFloat(document.getElementById('setupRate').value) || 0;
+            const markup = parseFloat(document.getElementById('markup').value) || 0;
+            const prodRates = {
+                easy: parseFloat(document.getElementById('prodEasy').value) || 300,
+                medium: parseFloat(document.getElementById('prodMedium').value) || 200,
+                detail: parseFloat(document.getElementById('prodDetail').value) || 100
+            };
+            const elixirCost = parseFloat(document.getElementById('elixirCost').value) || 0;
+            const colorCost = parseFloat(document.getElementById('colorCost').value) || 0;
+            const cupsPerGal = parseFloat(document.getElementById('cupsPerGal').value) || 32.5;
+
+            const crewSize = parseInt(document.getElementById('crewSize').value) || 1;
+            const brickSelect = document.getElementById('brickType');
+            const brickPerSF = parseFloat(brickSelect.options[brickSelect.selectedIndex].dataset.persf) || 6.5;
+            const brickPerCup = parseFloat(brickSelect.options[brickSelect.selectedIndex].dataset.percup) || 80;
+
+            // Calculate areas
+            const rows = document.getElementById('areasBody').querySelectorAll('tr');
+            let totalSF = 0;
+            let totalDays = 0;
+
+            rows.forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                const select = row.querySelector('select');
+                
+                // inputs: 0=desc, 1=length, 2=height, 3=sf, 4=days
+                const length = parseFloat(inputs[1].value) || 0;
+                const height = parseFloat(inputs[2].value) || 0;
+                const sf = length * height;
+                inputs[3].value = sf > 0 ? sf : '';
+                
+                const difficulty = select.value;
+                const prodRate = prodRates[difficulty];
+                
+                const days = sf > 0 ? sf / (prodRate * crewSize) : 0;
+                inputs[4].value = days > 0 ? days.toFixed(2) : '';
+                
+                totalSF += sf;
+                totalDays += days;
+            });
+
+            // Labor cost
+            const laborCost = totalDays * crewSize * dailyRate;
+
+            // Materials
+            const brickCount = totalSF * brickPerSF;
+            const halfCupsNeeded = brickCount / brickPerCup;
+            const gallonsElixir = Math.ceil(halfCupsNeeded / cupsPerGal * 10) / 10;
+            const tubsColor = Math.ceil((halfCupsNeeded * 1.5) / 72 * 10) / 10; // 72 tsp per tub, 1.5 tsp per half cup
+            const materialsCost = (gallonsElixir * elixirCost) + (tubsColor * colorCost);
+
+            // Setup/Cleanup
+            const setupHours = parseFloat(document.getElementById('setupHours').value) || 0;
+            const cleanupHours = parseFloat(document.getElementById('cleanupHours').value) || 0;
+            const setupCost = (setupHours + cleanupHours) * setupRate;
+
+            // Subs
+            const pressureWash = parseFloat(document.getElementById('pressureWash').value) || 0;
+            const otherSub = parseFloat(document.getElementById('otherSub').value) || 0;
+            const subsCost = pressureWash + otherSub;
+
+            // Totals
+            const subtotal = laborCost + materialsCost + setupCost + subsCost;
+            const markupAmount = subtotal * (markup / 100);
+            const stainingTotal = subtotal + markupAmount;
+            const samplePanel = parseFloat(document.getElementById('samplePanel').value) || 0;
+            const grandTotal = stainingTotal + samplePanel;
+            const perSF = totalSF > 0 ? stainingTotal / totalSF : 0;
+
+            // Update display
+            document.getElementById('totalLabor').textContent = '$' + laborCost.toFixed(0);
+            document.getElementById('totalMaterials').textContent = '$' + materialsCost.toFixed(0);
+            document.getElementById('totalSetup').textContent = '$' + setupCost.toFixed(0);
+            document.getElementById('totalSubs').textContent = '$' + subsCost.toFixed(0);
+            document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(0);
+            document.getElementById('markupPct').textContent = markup;
+            document.getElementById('totalMarkup').textContent = '$' + markupAmount.toFixed(0);
+            document.getElementById('stainingTotal').textContent = '$' + stainingTotal.toFixed(0);
+            document.getElementById('samplePanelTotal').textContent = '$' + samplePanel.toFixed(0);
+            document.getElementById('grandTotal').textContent = '$' + grandTotal.toFixed(0);
+            document.getElementById('totalSF').textContent = totalSF;
+            document.getElementById('perSF').textContent = '$' + perSF.toFixed(2);
+
+            // Update preview
+            document.getElementById('previewSF').textContent = totalSF;
+            document.getElementById('previewStaining').textContent = '$' + stainingTotal.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('previewTotal').textContent = '$' + grandTotal.toLocaleString('en-US', {maximumFractionDigits: 0});
+
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const date = document.getElementById('quoteDate').value;
+            const project = document.getElementById('projectName').value || '—';
+            const address = document.getElementById('address').value;
+            const cityStateZip = document.getElementById('cityStateZip').value;
+            const contact = document.getElementById('contact').value || '—';
+            const estimator = document.getElementById('estimator').value;
+
+            document.getElementById('previewDate').textContent = date ? new Date(date).toLocaleDateString() : '—';
+            document.getElementById('previewProject').textContent = project;
+            document.getElementById('previewAddress').textContent = address && cityStateZip ? address + ', ' + cityStateZip : (address || cityStateZip || '—');
+            document.getElementById('previewContact').textContent = contact;
+            document.getElementById('previewEstimator').textContent = estimator;
+
+            // Update pricing table sample panel
+            const samplePanel = parseFloat(document.getElementById('samplePanel').value) || 0;
+            const pricingBody = document.getElementById('previewPricing');
+            pricingBody.querySelector('tr:first-child td:last-child').textContent = '$' + samplePanel.toLocaleString('en-US', {maximumFractionDigits: 0});
+        }
+
+        function copyToClipboard() {
+            const doc = document.getElementById('quoteDocument');
+            const text = doc.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Quote text copied to clipboard');
+            });
+        }
+
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
