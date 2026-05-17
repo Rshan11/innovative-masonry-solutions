@@ -249,11 +249,6 @@
                         >How It Works</a
                     >
                     <a
-                        href="#pricing"
-                        class="text-sm text-gray-400 hover:text-white transition-colors"
-                        >Pricing</a
-                    >
-                    <a
                         href="#gallery"
                         class="text-sm text-gray-400 hover:text-white transition-colors"
                         >Gallery</a
@@ -263,25 +258,6 @@
                         class="text-sm text-gray-400 hover:text-white transition-colors"
                         >FAQ</a
                     >
-                    <a
-                        href="/tool/"
-                        class="text-sm text-accent-400 hover:text-accent-300 transition-colors font-semibold flex items-center gap-1"
-                    >
-                        <svg
-                            class="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            />
-                        </svg>
-                        Estimate Tool
-                    </a>
                 </div>
                 <div class="flex items-center gap-4">
                     <a
@@ -344,12 +320,6 @@
                     >How It Works</a
                 >
                 <a
-                    href="#pricing"
-                    onclick="toggleMobileMenu()"
-                    class="text-lg text-gray-300 hover:text-white transition-colors"
-                    >Pricing</a
-                >
-                <a
                     href="#gallery"
                     onclick="toggleMobileMenu()"
                     class="text-lg text-gray-300 hover:text-white transition-colors"
@@ -361,12 +331,7 @@
                     class="text-lg text-gray-300 hover:text-white transition-colors"
                     >FAQ</a
                 >
-                <a
-                    href="/tool/"
-                    class="text-lg text-accent-400 hover:text-accent-300 transition-colors font-semibold"
-                    >Estimate Tool</a
-                >
-                <a
+                <
                     href="#contact"
                     onclick="toggleMobileMenu()"
                     class="mt-4 bg-accent-500 text-gunmetal-900 text-center font-semibold px-6 py-3 rounded-lg"
@@ -416,26 +381,7 @@
                     <div
                         class="animate-fade-in-up delay-400 flex flex-col sm:flex-row gap-4"
                     >
-                        <a
-                            href="#pricing"
-                            class="btn-glow inline-flex items-center justify-center bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-400 hover:to-accent-500 text-gunmetal-900 font-bold px-8 py-4 rounded-xl transition-all text-lg"
-                        >
-                            See Pricing
-                            <svg
-                                class="w-5 h-5 ml-2"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M19 9l-7 7-7-7"
-                                />
-                            </svg>
-                        </a>
-                        <a
+                        <
                             href="#how-it-works"
                             class="inline-flex items-center justify-center text-white font-semibold px-8 py-4 rounded-xl border-2 border-white/20 hover:bg-white/5 hover:border-white/30 transition-all text-lg"
                         >
@@ -1010,8 +956,8 @@
             </div>
         </section>
 
-        <!-- Pricing Section -->
-        <section id="pricing" class="py-24 bg-gunmetal-900 relative">
+        <!-- Pricing Section hidden — use estimator tool when ready -->
+        <section id="pricing" class="py-24 bg-gunmetal-900 relative" style="display:none">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="text-center mb-16 reveal">
                     <p
@@ -1167,31 +1113,6 @@
                     </p>
                 </div>
 
-                <!-- Estimate Tool CTA -->
-                <div class="mt-12 reveal text-center">
-                    <a
-                        href="/tool/"
-                        class="inline-flex items-center gap-3 bg-gradient-to-r from-brick-600 to-brick-700 hover:from-brick-500 hover:to-brick-600 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg shadow-brick-600/20"
-                    >
-                        <svg
-                            class="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            />
-                        </svg>
-                        Use Our Estimate Calculator
-                    </a>
-                    <p class="text-gray-500 text-sm mt-3">
-                        Get a detailed estimate based on your specific project
-                    </p>
-                </div>
             </div>
         </section>
 
@@ -1210,7 +1131,7 @@
                         Recent Projects
                     </h2>
                     <p class="text-gray-400 text-lg">
-                        Real transformations with real pricing.
+                        Real transformations. Real results.
                     </p>
                 </div>
 
@@ -1616,11 +1537,6 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-6">
-                        <a
-                            href="/tool/"
-                            class="text-accent-400 hover:text-accent-300 text-sm font-semibold transition-colors"
-                            >Estimate Tool</a
-                        >
                         <a
                             href="#contact"
                             class="text-gray-400 hover:text-white text-sm transition-colors"
