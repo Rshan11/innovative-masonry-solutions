@@ -1043,10 +1043,10 @@
                     </p>
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="gallery-carousel">
                     <!-- Project 1 -->
                     <div
-                        class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden"
+                        class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden"
                     >
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/fireplace-before-after.png" alt="Fireplace brick staining before and after — orange brick transformed to charcoal gray, Portland OR" class="w-full h-full object-cover"  loading="lazy"/>
@@ -1070,7 +1070,7 @@
 
                     <!-- Project 2 -->
                     <div
-                        class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden"
+                        class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden"
                     >
                         <div class="aspect-[4/3] overflow-hidden grid grid-cols-2">
                             <img src="/images/before.png" alt="Before — original brick color on home front facade" class="w-full h-full object-cover"  loading="lazy"/>
@@ -1095,7 +1095,7 @@
 
                     <!-- Project 3 -->
                     <div
-                        class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden"
+                        class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden"
                     >
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/updated-look.jpg" alt="Full home exterior brick staining — complete color transformation to deep red, Portland OR" class="w-full h-full object-cover"  loading="lazy"/>
@@ -1116,11 +1116,8 @@
                             </p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Second row — additional work -->
-                <div class="grid md:grid-cols-3 gap-8 mt-8">
-                    <div class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
+                    <!-- Second row — additional work -->
+                    <div class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/original.jpg" alt="Original white brick home exterior before staining" class="w-full h-full object-cover"  loading="lazy"/>
                         </div>
@@ -1129,7 +1126,7 @@
                             <p class="text-gray-400 text-sm">Original color before transformation</p>
                         </div>
                     </div>
-                    <div class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
+                    <div class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/wall-partially-done.jpg" alt="CMU block wall partially stained, Tualatin OR — showing staining process in progress" class="w-full h-full object-cover"  loading="lazy"/>
                         </div>
@@ -1138,7 +1135,7 @@
                             <p class="text-gray-400 text-sm">Commercial block wall, Tualatin</p>
                         </div>
                     </div>
-                    <div class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
+                    <div class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/brick-sample-panel.png" alt="Brick stain sample panel showing color options on actual brick" class="w-full h-full object-cover"  loading="lazy"/>
                         </div>
@@ -1147,10 +1144,8 @@
                             <p class="text-gray-400 text-sm">Sample panel — test area before full application</p>
                         </div>
                     </div>
-                </div>
-                <!-- Third row — Masonry Cosmetics reference projects -->
-                <div class="grid md:grid-cols-3 gap-8 mt-8">
-                    <div class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
+                    <!-- Third row — Masonry Cosmetics reference projects -->
+                    <div class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/mc-exterior-before-after.jpg" alt="Exterior brick home before and after staining — full color transformation" class="w-full h-full object-cover"  loading="lazy"/>
                         </div>
@@ -1159,7 +1154,7 @@
                             <p class="text-gray-400 text-sm">Full exterior stain · Masonry Cosmetics system</p>
                         </div>
                     </div>
-                    <div class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
+                    <div class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/mc-red-brick-before-after.jpg" alt="Red brick stained to darker tone — before and after comparison" class="w-full h-full object-cover"  loading="lazy"/>
                         </div>
@@ -1168,7 +1163,7 @@
                             <p class="text-gray-400 text-sm">Color deepened · no paint, no peeling</p>
                         </div>
                     </div>
-                    <div class="reveal card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
+                    <div class="card-hover bg-gunmetal-900 rounded-2xl overflow-hidden">
                         <div class="aspect-[4/3] overflow-hidden">
                             <img src="/images/mc-2000-vs-2019.jpg" alt="Same brick staining job photographed in 2000 and again in 2019 — no fading, no peeling" class="w-full h-full object-cover"  loading="lazy"/>
                         </div>
@@ -1178,6 +1173,7 @@
                         </div>
                     </div>
                 </div>
+                <p class="md:hidden text-center text-gray-600 text-xs mt-4 tracking-widest">swipe to see more &rsaquo;</p>
             </div>
         </section>
 
@@ -1483,6 +1479,7 @@
             }
 
             window.addEventListener("scroll", reveal);
+            window.addEventListener("touchmove", reveal, { passive: true });
             window.addEventListener("load", reveal);
 
             // Show success banner after Formspree redirect

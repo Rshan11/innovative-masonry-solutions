@@ -95,3 +95,43 @@ html {
 .mobile-menu.open {
     transform: translateX(0);
 }
+
+/* Gallery — horizontal scroll carousel on mobile, 3-col grid on desktop */
+.gallery-carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.25rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.gallery-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery-carousel > * {
+    scroll-snap-align: start;
+    flex: 0 0 78vw;
+}
+
+@media (min-width: 768px) {
+    .gallery-carousel {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        overflow-x: visible;
+        padding: 0;
+        margin: 0;
+        scroll-snap-type: none;
+    }
+
+    .gallery-carousel > * {
+        flex: none;
+    }
+}
