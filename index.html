@@ -1346,6 +1346,8 @@
                         <!-- Contact form -->
                         <form action="https://formspree.io/f/mredgepo" method="POST" class="space-y-4">
                             <input type="hidden" name="_subject" value="New quote request from Innovative Masonry Solutions" />
+                            <input type="hidden" name="_next" value="https://www.innovativemasonrysolutions.com/?sent=1" />
+                            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm text-gray-400 mb-1">First name</label>
@@ -1482,6 +1484,16 @@
 
             window.addEventListener("scroll", reveal);
             window.addEventListener("load", reveal);
+
+            // Show success banner after Formspree redirect
+            if (new URLSearchParams(window.location.search).get('sent') === '1') {
+                const banner = document.createElement('div');
+                banner.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#22262e;border:1px solid #C9A227;color:#fff;padding:16px 28px;border-radius:12px;font-family:Inter,sans-serif;font-size:15px;box-shadow:0 8px 32px rgba(0,0,0,0.4);text-align:center;max-width:420px;width:90%';
+                banner.innerHTML = '<strong style="color:#C9A227">Message sent.</strong> We\'ll be in touch within 24 hours.';
+                document.body.appendChild(banner);
+                setTimeout(() => banner.remove(), 6000);
+                history.replaceState({}, '', '/');
+            }
         </script>
     </body>
 </html>
